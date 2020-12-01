@@ -1,4 +1,0 @@
-import Data.Scientific
-
-series :: Int -> Double -> Double
-series n a = (2 * a - 1) ** n / (2 * n + 3) ** 2
