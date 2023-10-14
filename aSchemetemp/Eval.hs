@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# OPTIONS_GHC -Wno-type-defaults #-}
 
-module Eval where
+module Scheme.Eval where
 
 import Control.Monad.Except
   ( MonadError (catchError, throwError),
@@ -23,9 +23,10 @@ import Data.Complex (Complex (..), imagPart, magnitude, mkPolar, realPart)
 import Data.Fixed (mod')
 import Data.Foldable (foldlM)
 import Data.Functor ((<&>))
+import qualified Data.Functor
 import Data.Maybe (isNothing)
 import Data.Ratio (denominator, numerator)
-import Env
+import Scheme.Env
   ( Env,
     IOThrowsError,
     SchemeError
@@ -66,7 +67,7 @@ import Env
     nullEnv,
     setVar,
   )
-import Read (readExpr, readExprList)
+import Scheme.Read (readExpr, readExprList)
 import System.IO
   ( IOMode (ReadMode, WriteMode),
     hClose,

@@ -1,17 +1,17 @@
-module Print where
-
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
 
+module Scheme.Print where
+
 import Control.Monad (liftM)
-import Env
+import Scheme.Env
   ( Env,
     SchemeVal (Atom, List, String),
     bindVars,
     liftThrows,
     runIOThrows,
   )
-import Eval (eval, primitiveBindings)
-import Read (readExpr)
+import Scheme.Eval (eval, primitiveBindings)
+import Scheme.Read (readExpr)
 import System.IO (hFlush, hPutStrLn, stderr, stdout)
 
 flushStr :: String -> IO ()

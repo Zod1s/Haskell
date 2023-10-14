@@ -1,4 +1,4 @@
-import Print (runOne, runRepl)
+import Scheme.Print (runOne, runRepl)
 import System.Environment (getArgs)
 
 main :: IO ()

@@ -1,6 +1,6 @@
-module Env where
-
 {-# LANGUAGE FlexibleContexts #-}
+
+module Scheme.Env where
 
 import Control.Monad.Except
   ( ExceptT,
@@ -240,4 +240,3 @@ bindVars envRef bindings = readIORef envRef >>= extendEnv bindings >>= newIORef
     addBinding (var, value) = do
       ref <- newIORef value
       return (var, ref)
-
