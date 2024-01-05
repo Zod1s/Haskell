@@ -1,4 +1,4 @@
--- | pure f <*> x = pure (flip ($)) <*> x <*> pure f = pure ($ x) <*> pure f
+-- \| pure f <*> x = pure (flip ($)) <*> x <*> pure f = pure ($ x) <*> pure f
 
 import Control.Applicative
 
@@ -22,4 +22,4 @@ instance Applicative Maybe where
 
 sequenceAL :: (Applicative f) => [f a] -> f [a]
 sequenceAL [] = pure []
-sequenceAL (x:xs) = (:) <$> x <*> sequenceAL xs
+sequenceAL (x : xs) = (:) <$> x <*> sequenceAL xs

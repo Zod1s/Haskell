@@ -1,6 +1,6 @@
-module Print where
-
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
+
+module Print where
 
 import Control.Monad (liftM)
 import Env
@@ -38,6 +38,7 @@ runOne :: [String] -> IO ()
 runOne args =
   do
     env <- primitiveBindings >>= flip bindVars [("args", List $ map String $ drop 1 args)]
+    evalString env "(load \"stdlib.scm\")"
     runIOThrows (show <$> eval env (List [Atom "load", String (head args)])) >>= hPutStrLn stderr
 
 runRepl :: IO ()

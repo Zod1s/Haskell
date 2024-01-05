@@ -1,6 +1,6 @@
-module Env where
-
 {-# LANGUAGE FlexibleContexts #-}
+
+module Env where
 
 import Control.Monad.Except
   ( ExceptT,
@@ -110,7 +110,8 @@ instance Show SchemeVal where
   show (Vector contents) = show contents
   show (PrimitiveFunc _) = "<primitive>"
   show (Func {params = args, vararg = varargs, body = _, closure = _}) =
-    "(lambda(" ++ unwords (map show args)
+    "(lambda("
+      ++ unwords (map show args)
       ++ ( case varargs of
              Nothing -> ""
              Just arg -> " . " ++ arg
@@ -135,11 +136,13 @@ data SchemeError
 
 instance Show SchemeError where
   show (NumArgs expected found) =
-    "Expected " ++ show expected
+    "Expected "
+      ++ show expected
       ++ " args; found values "
       ++ unwordsList found
   show (TypeMismatch expected found) =
-    "Invalid type: expected " ++ expected
+    "Invalid type: expected "
+      ++ expected
       ++ ", found "
       ++ show found
   show (Parser parseErr) = "Parse error at " ++ show parseErr
@@ -240,4 +243,3 @@ bindVars envRef bindings = readIORef envRef >>= extendEnv bindings >>= newIORef
     addBinding (var, value) = do
       ref <- newIORef value
       return (var, ref)
-

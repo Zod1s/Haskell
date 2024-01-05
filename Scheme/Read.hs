@@ -1,13 +1,12 @@
-module Read where
-
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
+
+module Read where
 
 import Control.Monad (void)
 import Control.Monad.Except (MonadError (throwError), void)
 import Data.Array (listArray)
 import Data.Complex (Complex ((:+)))
 import Data.Ratio ((%))
-import Numeric (readFloat, readHex, readOct)
 import Env
   ( SchemeError (Parser),
     SchemeVal
@@ -25,6 +24,7 @@ import Env
       ),
     ThrowsError,
   )
+import Numeric (readFloat, readHex, readOct)
 import Text.ParserCombinators.Parsec
   ( Parser,
     alphaNum,

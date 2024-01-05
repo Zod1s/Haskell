@@ -12,14 +12,15 @@
 --     fmap g (e, x) = (e, g x)
 
 data Pair a = Pair a a
-            deriving (Show)
+  deriving (Show)
 
 instance Functor Pair where -- fmap :: (a -> b) -> Pair a a -> Pair b b
-    fmap g (Pair x y) = Pair (g x) (g y)
+  fmap g (Pair x y) = Pair (g x) (g y)
 
-data ITree a = Leaf (Int -> a)
-             | Node [ITree a]
+data ITree a
+  = Leaf (Int -> a)
+  | Node [ITree a]
 
 instance Functor ITree where
-    fmap f (Leaf g) = Leaf (f . g)
-    fmap f (Node l) = Node (map (fmap f) l)
+  fmap f (Leaf g) = Leaf (f . g)
+  fmap f (Node l) = Node (map (fmap f) l)

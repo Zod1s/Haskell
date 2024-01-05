@@ -23,16 +23,17 @@ instance Foldable [] where
 
 import Data.Foldable hiding (fold)
 
-data Tree a = Empty
-            | Leaf a
-            | Node (Tree a) a (Tree a)
-            deriving (Show)
+data Tree a
+  = Empty
+  | Leaf a
+  | Node (Tree a) a (Tree a)
+  deriving (Show)
 
 instance Foldable Tree where
-    -- foldMap :: Monoid m => (a -> m) -> Tree a -> m
-    foldMap f Empty = mempty
-    foldMap f (Leaf x) = f x
-    foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
+  -- foldMap :: Monoid m => (a -> m) -> Tree a -> m
+  foldMap f Empty = mempty
+  foldMap f (Leaf x) = f x
+  foldMap f (Node l k r) = foldMap f l `mappend` f k `mappend` foldMap f r
 
 fold :: (Monoid m, Foldable t) => t m -> m
 fold = foldMap id

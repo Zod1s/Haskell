@@ -1,10 +1,14 @@
-{-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies, FlexibleInstances #-}
-module SupplyClass(
-    MonadSupply(..)
-  , S.Supply
-  , S.runSupply) where
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
-import qualified Supply as S
+module SupplyClass
+  ( MonadSupply (..),
+    S.Supply,
+    S.runSupply,
+  )
+where
+
+import Supply qualified as S
 
 class (Monad m) => MonadSupply s m | m -> s where
   next :: m (Maybe s)
@@ -12,8 +16,8 @@ class (Monad m) => MonadSupply s m | m -> s where
 instance MonadSupply s (S.Supply s) where
   next = S.next
 
-showTwo_class :: (Show s, Monad m, MonadSupply s m) => m String
-showTwo_class = do
+showTwoClass :: (Show s, Monad m, MonadSupply s m) => m String
+showTwoClass = do
   a <- next
   b <- next
   return ("a: " ++ show a ++ ", b: " ++ show b)

@@ -80,7 +80,7 @@ import System.IO
     stdout,
   )
 
-data Unpacker = forall a. Eq a => AnyUnpacker (SchemeVal -> ThrowsError a)
+data Unpacker = forall a. (Eq a) => AnyUnpacker (SchemeVal -> ThrowsError a)
 
 type Mode = String
 
@@ -563,7 +563,8 @@ sciExpt [x, y] = numCast [x, y] >>= go
     go (List [Number x', Number y']) =
       return $
         Number $
-          round $ fromInteger x' ** fromInteger y'
+          round $
+            fromInteger x' ** fromInteger y'
     go (List [Float x', Float y']) = return $ Float $ x' ** y'
     go (List [Ratio x', Ratio y']) = return $ Float $ fromRational x' ** fromRational y'
     go (List [Complex x', Complex y']) = return $ Complex $ x' ** y'
@@ -819,7 +820,7 @@ charToUpper [Character x] = return $ Character $ toUpper x
 charToUpper [notchar] = throwError $ TypeMismatch "Char" notchar
 charToUpper badArgList = throwError $ NumArgs 1 badArgList
 
---symbol
+-- symbol
 
 symbol2string, string2symbol :: SchemeVal -> SchemeVal
 symbol2string (Atom s) = String s
@@ -1070,11 +1071,13 @@ makeVector :: Primitive
 makeVector [Number k] =
   return $
     Vector $
-      listArray (0, fromInteger k - 1) $ replicate (fromInteger k) (List [])
+      listArray (0, fromInteger k - 1) $
+        replicate (fromInteger k) (List [])
 makeVector [Number k, fill] =
   return $
     Vector $
-      listArray (0, fromInteger k - 1) $ replicate (fromInteger k) fill
+      listArray (0, fromInteger k - 1) $
+        replicate (fromInteger k) fill
 makeVector (notNum : _) = throwError $ TypeMismatch "number" notNum
 makeVector badArgList = throwError $ NumArgs 1 badArgList
 
@@ -1095,7 +1098,7 @@ vectorRef badArgList = throwError $ NumArgs 1 badArgList
 
 -- Helper
 
-foldl1M :: Monad m => (a -> a -> m a) -> [a] -> m a
+foldl1M :: (Monad m) => (a -> a -> m a) -> [a] -> m a
 foldl1M f (x : xs) = foldlM f x xs
 foldl1M _ _ = error "Unexpected error in foldl1M"
 
@@ -1149,5 +1152,5 @@ checkReserved :: String -> IOThrowsError ()
 checkReserved var
   | var `elem` reservedKeywords = throwError $ ReservedKeyword var
   | otherwise = case lookup var primitives of
-    Just _ -> throwError $ ReservedKeyword var
-    Nothing -> return ()
+      Just _ -> throwError $ ReservedKeyword var
+      Nothing -> return ()
