@@ -12,21 +12,21 @@ local :: (e -> e') -> Reader e' a -> Reader e a
 local transform (Reader f) = Reader (f . transform)
 
 instance Functor (Reader e) where
-  -- fmap :: (a -> b) -> Reader e a -> Reader e b
+  fmap :: (a -> b) -> Reader e a -> Reader e b
   fmap f (Reader fn) = Reader (f . fn)
 
 instance Applicative (Reader e) where
-  -- pure :: a -> Reader e a
+  pure :: a -> Reader e a
   pure a = Reader (const a)
 
-  -- (<*>) :: (<*>) :: Reader e (a -> b) -> Reader e a -> Reader e b
+  (<*>) :: Reader e (a -> b) -> Reader e a -> Reader e b
   (Reader fn) <*> (Reader fa) = Reader (\e -> let a = fa e in fn e a)
 
 instance Monad (Reader e) where
-  -- return :: a -> Reader e a
+  return :: a -> Reader e a
   return = pure
-  -- (>>=) :: Reader e a -> (a -> Reader e b) -> Reader e b
   (Reader g) >>= f = Reader (\e -> runReader (f . g $ e) e)
+  (>>=) :: Reader e a -> (a -> Reader e b) -> Reader e b
 
 -- # ----------------------------------------------- # --
 
