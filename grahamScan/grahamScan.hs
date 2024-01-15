@@ -85,6 +85,7 @@ main = do
     Left err -> putStrLn err
     Right list -> print list
 
+list :: [(Double, Double)]
 list = [(2, 4), (3, 5), (4, 5), (7, 6), (7, 7), (-2, 3), (3, 1), (9, 2), (-1, 9)]
 
 pointList :: [Point]

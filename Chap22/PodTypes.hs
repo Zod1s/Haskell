@@ -1,13 +1,21 @@
 module PodTypes where
 
-data Podcast = Podcast {
-    castId :: Integer, -- ^ Numeric ID for this podcast
-    castURL :: String} -- ^ Its feed URL
-    deriving (Eq, Show, Read)
+data Podcast = Podcast
+  { -- | Numeric ID for this podcast
+    castId :: Integer,
+    -- | Its feed URL
+    castURL :: String
+  }
+  deriving (Eq, Show, Read)
 
-data Episode = Episode {
-    epId :: Integer,     -- ^ Numeric ID for this episode
-    epCast :: Podcast, -- ^ The ID of the podcast it came from
-    epURL :: String,     -- ^ The download URL for this episode
-    epDone :: Bool}      -- ^ Whether or not we are done with this ep
-    deriving (Eq, Show, Read)
+data Episode = Episode
+  { -- | Numeric ID for this episode
+    epId :: Integer,
+    -- | The ID of the podcast it came from
+    epCast :: Podcast,
+    -- | The download URL for this episode
+    epURL :: String,
+    -- | Whether or not we are done with this ep
+    epDone :: Bool
+  }
+  deriving (Eq, Show, Read)

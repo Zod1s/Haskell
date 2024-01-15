@@ -1,44 +1,57 @@
 module PodMain where
 
-import PodDownload
+import Database.HDBC
+import Network.Socket (withSocketsDo)
 import PodDB
+import PodDownload
 import PodTypes
 import System.Environment
-import Database.HDBC
-import Network.Socket(withSocketsDo)
 
-main :: IO()
-main = withSocketsDo $ handleSqlError $
-    do args <- getArgs
-       dbh <- connect "pod.db"
-       case args of
-           ["add", url] -> add dbh url
-           ["update"] -> update dbh
-           ["download"] -> download dbh
-           ["fetch"] -> do update dbh
-                           download dbh
-           _ -> syntaxError
-       disconnect dbh
+main :: IO ()
+main = withSocketsDo $
+  handleSqlError $
+    do
+      args <- getArgs
+      dbh <- connect "pod.db"
+      case args of
+        ["add", url] -> add dbh url
+        ["update"] -> update dbh
+        ["download"] -> download dbh
+        ["fetch"] -> do
+          update dbh
+          download dbh
+        _ -> syntaxError
+      disconnect dbh
 
-add dbh url = do addPodcast dbh pc
-                 commit dbh
-    where pc = Podcast {castId = 0, castURL = url}
+add dbh url = do
+  addPodcast dbh pc
+  commit dbh
+  where
+    pc = Podcast {castId = 0, castURL = url}
 
-update dbh = do pclist <- getPodcasts dbh
-                mapM_ procPodcast pclist
-    where procPodcast pc = do putStrLn $ "Updating from " ++ (castURL pc)
-                              updatePodcastFromFeed dbh pc
+update dbh = do
+  pclist <- getPodcasts dbh
+  mapM_ procPodcast pclist
+  where
+    procPodcast pc = do
+      putStrLn $ "Updating from " ++ castURL pc
+      updatePodcastFromFeed dbh pc
 
-download dbh = do pclist <- getPodcasts dbh
-                  mapM_ procPodcast pclist
-    where procPodcast pc = do putStrLn $ "Considering " ++ (castURL pc)
-                              episodelist <- getPodcastEpisodes dbh pc
-                              let dleps = filter (\ep -> epDone ep == False) episodelist
-                              mapM_ procEpisode dleps
-          procEpisode ep = do putStrLn $ "Downloading " ++ (epURL ep)
-                              getEpisode dbh ep
+download dbh = do
+  pclist <- getPodcasts dbh
+  mapM_ procPodcast pclist
+  where
+    procPodcast pc = do
+      putStrLn $ "Considering " ++ castURL pc
+      episodelist <- getPodcastEpisodes dbh pc
+      let dleps = filter (not . epDone) episodelist
+      mapM_ procEpisode dleps
+    procEpisode ep = do
+      putStrLn $ "Downloading " ++ epURL ep
+      getEpisode dbh ep
 
-syntaxError = putStrLn
+syntaxError =
+  putStrLn
     "Usage: pod command [args]\n\
     \\n\
     \pod add url      Adds a new podcast with the given URL\n\

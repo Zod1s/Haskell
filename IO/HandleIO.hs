@@ -17,6 +17,7 @@ import System.IO (Handle, IOMode (..))
 import System.IO qualified
 
 instance MonadIO HandleIO where
+  liftIO :: IO a -> HandleIO a
   liftIO = HandleIO
 
 newtype HandleIO a = HandleIO {runHandleIO :: IO a}
