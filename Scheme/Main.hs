@@ -1,6 +1,8 @@
 import Print (runOne, runRepl)
 import System.Environment (getArgs)
 
+-- rlwrap to add history
+
 main :: IO ()
 main = do
   args <- getArgs
