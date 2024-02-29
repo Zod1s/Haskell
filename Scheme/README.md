@@ -1,1 +1,0 @@
-Use rlwrap to use arrow keys in REPL
